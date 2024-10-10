@@ -1,0 +1,166 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello DivisionController!{% endblock %}
+
+{% block body %}
+
+<script>
+    $('#id1').click(function(){
+	    $('#hiddenForm').show();  
+        $('#id1').hide();         
+	});
+</script>
+
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+
+    .rightPart{
+
+    }
+
+    .avatar{
+        width:40px;
+        height:40px;
+
+        border: 2px solid #dddddd;
+        border-radius:50%;
+
+        position:relative;
+        z-index:200;
+
+    }
+
+    .menublock{
+        position:relative; 
+        display: inline-block;
+        float: right;
+    }
+
+    .hiddenBlock {
+        font-size: 18px;
+        display: none;
+        position: absolute;
+        background-color: #cccccc;
+        padding:10px;
+        min-width:300px;
+        min-height: 400px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+
+        top:-7px;
+        left:-250px;
+        z-index: 100;
+    }
+
+    .avatar:hover{
+        background-color:black;
+
+    }
+
+    .menublock:hover .hiddenBlock {display: block;}
+
+
+    .menuPart:hover{
+        background-color:white;
+        border-radius:10px;
+
+    }
+
+    .mainPart{
+        width:100wh;
+        min-height:80vh;
+        background-color:#eeeeee;
+    }
+
+    .division{
+        width:60%;
+        min-height: 100px;
+        margin:0 auto;
+        padding:10px;
+        background-color:#aaaaaa;
+        color:white;
+
+        border: 2px solid #dddddd;
+        border-radius:10px;
+    }
+
+    .hiddenForm{
+        position:absolute;
+        width:500px;
+        height:500px;
+        background-color:red;
+        display:none;
+    }
+
+</style>
+
+<div class="container">
+    <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
+        <a href="/" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
+            <img src="{{ asset('Files/Icons/home.svg') }}" alt="Home">
+        </a>
+
+        <!--ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+        <li><a href="#" class="nav-link px-2 link-secondary">Home</a></li>
+        <li><a href="#" class="nav-link px-2 link-dark">Features</a></li>
+        <li><a href="#" class="nav-link px-2 link-dark">Pricing</a></li>
+        <li><a href="#" class="nav-link px-2 link-dark">FAQs</a></li>
+        <li><a href="#" class="nav-link px-2 link-dark">About</a></li>
+        </ul-->
+
+        {% if isAunt == null%}
+            <div class="col-md-3 text-end">
+            <button onclick= "document.location='{{ path('login') }}'" type="button" class="btn btn-outline-primary me-2">Login</button>
+            <button onclick= "document.location='{{ path('register') }}'" type="button" class="btn btn-primary">Sign-up</button>
+            </div>
+        {% else %}
+            <div style = "display:row; min-width:230px;">
+                <button onclick = "document.location='{{ path('division') }}'"  type="button" class="btn btn-primary"}}'">Разделы</button>
+                <!--button onclick = "document.location='{{ path('app_logout') }}'"  type="button" class="btn btn-primary"}}'">Выход</button>
+                <div class = "avatar" style = "float: right;"></div-->
+
+
+                 <div class = "menublock">
+                    <div class = "avatar"></div>
+                    <div class = "hiddenBlock"> 
+                        <div style = "height:40px; margin: 10px 20px;">{{user.username}}</div>
+                        <div style = "min-height:310px; width:90%; margin: 0 auto; background-color:#999999; border-radius:10px; padding:10px; display:column;">
+                            <a style = "width:100%; min-height:40px; display: block; text-decoration:none; padding:5px;" class = "menuPart">Сообщения</a>
+                            <a style = "width:100%; min-height:40px; display: block; text-decoration:none; padding:5px;" class = "menuPart">Друзья</a>
+                            <a href = "/logout" style = "width:100%; min-height:40px; display: block; text-decoration:none; padding:5px;" class = "menuPart">Выйти из аккаунта</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        {% endif %}
+    </header>
+</div>
+<div class = "mainPart">
+    
+    {% if articleArray == null %}
+        <div style = "height:20vh;"></div>
+        <div style = "width:50%; min-width:500px; margin: 0 auto;">
+            <h1 style = "text-align:center;">В этом разделе пока нет статей. Добавьте свою!</h1>
+        </div>
+    {% else %}
+        
+        {% for article in articleArray %}
+            <div style = "height:5px;"></div>
+            <a href = "/article/read/{{ article.id }}" style = "text-decoration: none;">
+                
+                <div class = "division">
+                    <h1>{{ article.name }}</h1>
+                    <p style = "margin-left:85%">Рейтинг: {{article.rating}}</p>
+                </div>
+            </a>
+        {% endfor %}
+
+    {% endif %}
+</div>
+
+
+<div class = "hiddenForm" id = "hiddenForm">
+  abcdef
+</div>
+{% endblock %}

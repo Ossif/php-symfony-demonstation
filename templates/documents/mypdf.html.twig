@@ -1,0 +1,54 @@
+
+{% block body %}
+    <h1>Admin report</h1>
+
+    <div style = "height: 20px; width:100%; border-top: 2px solid black;"></div>
+
+    <p style = "text-align:center; font-size:24px;">CurrentUsersList( count = {{usersCount}} ):</p>
+    <div style = "margin-left:40px;">
+        {% for user in users %}
+            <p> {{user.id}} : {{user.username}}</p>
+        {% endfor %}
+    </div>
+
+    <div style = "height: 20px; width:100%; border-top: 2px solid black;"></div>
+    <p style = "text-align:center; font-size:24px;">Admins( count = {{adminsCount}} ):</p>
+    <div style = "margin-left:40px;">
+        {% for admin in admins %}
+            <p> {{admin.userId.id}} : {{admin.userId.username}}</p>
+        {% endfor %}
+    </div>
+
+    <div style = "height: 20px; width:100%; border-top: 2px solid black;"></div>
+    <p style = "text-align:center; font-size:24px;">UserBlackList( count = {{blCount}} ):</p>
+    <div style = "margin-left:40px;">
+        {% for i in bl %}
+            <p> {{i.userId.id}} : {{i.userId.username}} - banned till {{i.getDatetimeEndString()}}</p>
+        {% endfor %}
+    </div>
+
+    <div style = "height: 20px; width:100%; border-top: 2px solid black;"></div>
+    <p style = "text-align:center; font-size:24px;">Articles( count = {{articlesCount}} ):</p>
+    <div style = "margin-left:40px;">
+        {% for article in articles %}
+            <p> id: {{article.id}};  name: {{article.name}}; rating: {{article.rating}}; creationDate: {{article.getDateCreationString()}}; lastEditDate: {{article.getDateEditString()}}</p>
+        {% endfor %}
+    </div>
+
+    <div style = "height: 20px; width:100%; border-top: 2px solid black;"></div>
+    <p style = "text-align:center; font-size:24px;">Divisions( count = {{divisionsCount}} ):</p>
+    <div style = "margin-left:40px;">
+        {% for division in divisions %}
+            <p>id: {{division.id}}; name: {% if division.id == 17%}Black List{% else %}{% if division.id == 13%}Default division{% else %}{{division.name}}{% endif %}{% endif %}; articleCount: {{division.articleCount}};</p>
+        {% endfor %}
+    </div>
+
+    <div style = "height: 20px; width:100%; border-top: 2px solid black;"></div>
+    <p style = "text-align:center; font-size:24px;">ArticleBlackList( count = {{ablCount}} ):</p>
+    <div style = "margin-left:40px;">
+        {% for article in abl %}
+            <p> id: {{article.id}};  name: {{article.name}}; rating: {{article.rating}}; creationDate: {{article.getDateCreationString()}}; lastEditDate: {{article.getDateEditString()}}</p>
+        {% endfor %}
+    </div>
+
+{% endblock %}

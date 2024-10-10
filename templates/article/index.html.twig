@@ -1,0 +1,252 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello DivisionController!{% endblock %}
+
+{% block body %}
+
+<script>
+    $('#id1').click(function(){
+	    $('#hiddenForm').show();  
+        $('#id1').hide();         
+	});
+</script>
+
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+
+    .rightPart{
+
+    }
+
+    .avatar{
+        width:40px;
+        height:40px;
+
+        border: 2px solid #dddddd;
+        border-radius:50%;
+
+    }
+
+    .mainPart{
+        width:100wh;
+        min-height:80vh;
+        background-color:#eeeeee;
+    }
+
+    .title{
+        margin: 0 auto;
+        max-width:1000px;
+        width:60%;
+        font-size:30;
+        color:black;
+        font-weight:bald;
+        text-align:center;
+    }
+
+    .division{
+        width:60%;
+        height: 100px;
+        margin:0 auto;
+        padding:10px;
+        background-color:#aaaaaa;
+        color:white;
+
+        border: 2px solid #dddddd;
+        border-radius:10px;
+    }
+
+    .ratingBox{
+        position:absolute; 
+        top:40px; 
+        left: 80%; 
+        width:50px; 
+        height: 90px; 
+        border: 2px solid #aaaaaa; 
+        border-radius:10px; 
+        {%if userRate == 0 %}
+            background-color:#cccccc;
+        {% endif %}
+        {%if userRate == 1 %}
+            background-color:#7eff2e;
+        {% endif %}
+        {%if userRate == -1 %}
+            background-color:#ff2e2e;
+        {% endif %}
+        text-align:center;
+        vertical-align:middle;
+    }
+
+    .delBut{
+        position:absolute; 
+        top:190px; 
+        left: 80.5%; 
+        height:30px;
+        width:30px;
+        color:red;
+        cursor:pointer;
+    }
+
+    .editBut{
+        position:absolute; 
+        top:140px; 
+        left: 80.5%; 
+        height:30px;
+        width:30px;
+        cursor:pointer;
+    }
+
+    .divBut{
+        position:absolute; 
+        top:240px; 
+        left: 80.6%; 
+        height:25px;
+        width:25px;
+        cursor:pointer;
+    }
+
+    .textBox{
+        width:60%;
+        color:black;
+        margin: 0 auto;
+        font-size:22px;
+        word-wrap:break-word;
+    }
+
+
+
+    .commentPart{
+        width:100wh;
+        min-height:300px;
+        background-color:#cccccc;
+        margin: 0 auto;
+    }
+
+    .btnForm{
+        height:60px;
+        width:150px;
+        margin-left:85%;
+        margin-bottom:10px;
+        background-color:#0d6efd;
+        border-radius:10px;
+        color:white;
+
+    }
+
+    .comment{
+        width:70%;
+        min-height: 60px;
+        color:black;
+        margin: 0 auto;
+        font-size:22px;
+        word-wrap:break-word;
+        background-color:#999999;
+        border: 3px solid #cccccc;
+        border-radius:15px; 
+    }
+
+
+    .commentHead{
+        display:row;
+        min-height:50px;
+        fint-size:18px;
+    }
+
+    .formText{
+        min-hwight: 100px;
+        font-size:20px;
+        color:black;
+        width:100%;
+
+    }
+</style>
+
+<div class="container">
+    <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
+        <a href="/" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
+            <img src="{{ asset('Files/Icons/home.svg') }}" alt="Home">
+        </a>
+
+        {% if isAunt == null%}
+            <div class="col-md-3 text-end">
+            <button onclick= "document.location='{{ path('login') }}'" type="button" class="btn btn-outline-primary me-2">Login</button>
+            <button onclick= "document.location='{{ path('register') }}'" type="button" class="btn btn-primary">Sign-up</button>
+            </div>
+        {% else %}
+            <div style = "display:row; min-width:230px;">
+                <button onclick = "document.location='{{ path('division') }}'"  type="button" class="btn btn-primary"}}'">Разделы</button>
+                <!--button onclick = "document.location='{{ path('app_logout') }}'"  type="button" class="btn btn-primary"}}'">Выход</button-->
+                <div class = "avatar" style = "float: right;"></div>
+            </div>
+        {% endif %}
+    </header>
+</div>
+
+<div class = "mainPart" style = "position:relative;" >
+    <div style = "height: 50px;"></div>
+    <h1 class = "title">{{ article.name }}<h1>
+    <div style = "height: 50px;"></div>
+    <div class = "ratingBox">
+        <div style = "margin-top:-15px; cursor:pointer;">
+            {% if userRate != 1 %}
+                <a href = "/article/rate/{{ article.id }}/1">
+                    <img src="{{ asset('Files/Icons/rate_arrow.svg') }}" alt="up"> 
+                </a>
+            {% else %}
+                <div style = "height:45px;"></div>
+            {% endif %}
+
+        </div>
+        <div style = "margin-top:-15px;">
+            {{ article.rating }}
+        </div>
+        
+        <div style = "margin-top:-20px; cursor:pointer;">
+            {% if userRate != -1 %}
+                <a href = "/article/rate/{{ article.id }}/-1">
+                    <img src="{{ asset('Files/Icons/rate_arrow.svg') }}" alt="down" style = "transform: rotate(180deg);">
+                </a>
+            {% endif %}
+        </div>
+        
+    </div>
+
+    <a href = "/article/edit/{{ article.id }}" class = "editBut">
+        <img src="{{ asset('Files/Icons/edit.svg') }}" alt="delete article">
+    </a>
+    <a href = "/article/delete/{{ article.id }}" class = "delBut">
+        <img src="{{ asset('Files/Icons/trash.svg') }}" alt="delete article" >
+    </a>
+    <a href = "/article/chooseDivision/{{ article.id }}" class = "divBut">
+        <img src="{{ asset('Files/Icons/folder.svg') }}" alt="choose division" >
+    </a>
+
+    <div class = "textBox" >
+        <pre>{{ article.text }}</pre>
+        {% for fileway in filewayArray %}
+            <p>{{ fileway }};</p>
+        {% endfor %}
+        <div style = "height:100px;"></div>
+    </div>
+    <p style = "font-size:18px; color:#555555; position:absolute; bottom:50px; right: 20%;">Дата создания: {{ dateCreation }}</p>
+    <p style = "font-size:18px; color:#555555; position:absolute; bottom:20px; right: 20%;">Дата посл. редактирования: {{ dateEdit }}</p>
+</div>
+<div class = "commentPart">
+    <div style = "height: 30px;"></div>
+    <div class = "comment">
+        {{ form_start(commForm) }}
+            {{ form_row(commForm.text, {'attr': {'class': 'formText'}}) }}
+            <button type="submit" class = "btnForm">Написать</button>
+        {{ form_end(commForm) }}
+    </div>
+    {% for comm in commArray %}
+        <div class = "comment">
+            <div class = "commentHead">
+                <p style = "font-size:18px; margin:10px;">{{comm.userId.username}}      {{comm.getStrDate()}}</p>
+                <p style = "font-size:20px; margin:10px;">{{comm.text}}</p>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

@@ -1,0 +1,108 @@
+    {% extends 'base.html.twig' %}
+    
+    {% block body %}
+
+
+    <style>
+        body {
+            font-family: arial;
+        }
+     
+        .form-group {
+            margin-bottom: 10px;
+        }
+     
+        input {
+            border: solid lightgrey 1px;
+            padding: 8px;
+        }
+     
+        label {
+            display: inline-block;
+            min-width: 150px;
+        }
+     
+        #chat {
+            height: 400px;
+            width: 600px;
+            border: solid lightgrey 1px;
+            overflow: auto;
+            margin-bottom: 20px;
+        }
+     
+        button {
+            padding: 6px 12px;
+        }
+     
+        .message {
+            overflow-wrap:break-word;
+            padding: 10px 5px;
+            margin-bottom: 10px;
+            border-bottom: solid lightgrey 1px;
+        }
+    </style>
+     
+    <div class = "mainPart">
+    <div id="chat">
+        {% for message in messageArray %}
+            <div class='message'>
+                <strong>{{message.senderId.username}}:</strong> {{message.text}}
+            </div>
+        {% endfor %}
+    </div>
+    <div>
+        <div class="form-group">
+            <label for="message">Message:</label> <input type="text" id="message">
+        </div>
+        <button type="button" id="sendBtn">Send</button>
+    </div>
+
+
+    <script type="text/javascript">
+        const socket = new WebSocket("ws://localhost:3001");
+     
+        socket.addEventListener("open", function() {
+            console.log("CONNECTED");
+        });
+     
+        function addMessage(name, message) {
+            const messageHTML = "<div class='message'><strong>" + name + ":</strong> " + message + "</div>";
+            document.getElementById("chat").innerHTML += messageHTML
+        }
+     
+        socket.addEventListener("message", function(e) {
+            console.log(e.data);
+            try
+            {
+                const message = JSON.parse(e.data);
+                if(message.sender == {{ user1.getId() }} || message.sender == {{ user2.getId() }}){
+                    addMessage(message.name, message.message);
+                }
+            }
+            catch(e)
+            {
+                // Catch any errors
+            }
+        });
+     
+     
+        document.getElementById("sendBtn").addEventListener("click", function() {
+
+            const message = {
+                name: "{{ user1.getUsername() }}",
+                message: document.getElementById("message").value,
+                sender: {{ user1.getId() }}
+            };
+            socket.send(JSON.stringify(message));
+            //addMessage(message.name, message.message);
+
+            let str = document.getElementById("message").value;
+
+            let str2 = "/message/save/{{user2.id}}/" + str;
+            if(str != ""){
+                document.location = str2;
+            }
+        });
+    </script>
+
+    {% endblock %}

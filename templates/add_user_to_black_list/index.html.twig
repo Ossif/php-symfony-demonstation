@@ -1,0 +1,181 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello HomeController!{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+
+
+    .avatar{
+        width:40px;
+        height:40px;
+
+        border: 2px solid #dddddd;
+        border-radius:50%;
+
+        position:relative;
+        z-index:200;
+
+    }
+
+    .menublock{
+        position:relative; 
+        display: inline-block;
+        float: right;
+    }
+
+    .hiddenBlock {
+        font-size: 18px;
+        display: none;
+        position: absolute;
+        background-color: #cccccc;
+        padding:10px;
+        min-width:300px;
+        min-height: 400px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+
+        top:-7px;
+        left:-250px;
+        z-index: 100;
+    }
+
+    .avatar:hover{
+        background-color:black;
+
+    }
+
+    .menublock:hover .hiddenBlock {display: block;}
+
+
+    .menuPart:hover{
+        background-color:white;
+        border-radius:10px;
+
+    }
+
+
+    .mainPart{
+        widht:100wh;
+        min-height:80vh;
+        background-color:#dddddd;
+
+    }
+
+    .miniPage{
+        min-widht:600px;
+        height:100%;
+        background-color:#aaaaaa;
+        display:inline-block;
+        padding: 0 20px;
+        font-size:20px;
+        text-decoration:none;
+        color:black;
+    }
+
+    .miniPage:hover{
+        background-color:white;
+        cursor:pointer;
+    }
+
+
+    .friend{
+        background-color:#eeeeee;
+        width:70%;
+        min-height:50px;
+        margin:20px;
+        padding:15px;
+        font-size:20px;
+
+        border-radius:10px;
+    }
+
+</style>
+
+<!--div class="example-wrapper">
+    <button onclick= "document.location='{{ path('login') }}'">Логин</button>
+    <button onclick= "document.location='{{ path('app_logout') }}'">Выход</button>
+    <button onclick= "document.location='{{ path('register') }}'" >Регистрация</button>
+    {% if isAunt != null%}
+        <button onclick= "document.location='{{ path('deleteacc') }}'" >Удалить моего пользователя</button>
+        <button onclick= "document.location='{{ path('makeAuthor') }}'" >Стать автором</button>
+    {% endif %}
+</div-->
+
+
+<div class="container">
+    <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
+        <div style = "display:row; min-width:250px;">
+            <a style = "float: left;" href="/" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
+                <img src="{{ asset('Files/Icons/home.svg') }}" alt="Home">
+            </a>
+            {% if isAunt != null%}
+                <button onclick = "document.location='{{ path('makeAuthor') }}'"  type="button" class="btn btn-primary"}}'" 
+                    style = "background-color:white; border-width:3px; color: #0d6efd; float: left;">
+                    Создать статью
+                </button>
+            {% endif %}
+        </div>
+
+        {% if isAunt == null%}
+            <div class="col-md-3 text-end">
+            <button onclick= "document.location='{{ path('login') }}'" type="button" class="btn btn-outline-primary me-2">Login</button>
+            <button onclick= "document.location='{{ path('register') }}'" type="button" class="btn btn-primary">Sign-up</button>
+            </div>
+        {% else %}
+            <div style = "display:row; min-width:230px;">
+                <button onclick = "document.location='{{ path('division') }}'"  type="button" class="btn btn-primary"}}'">Разделы</button>
+                <!--button onclick = "document.location='{{ path('app_logout') }}'"  type="button" class="btn btn-primary"}}'">Выход</button-->
+                
+                
+                
+                <div class = "menublock">
+                    <div class = "avatar"></div>
+                    <div class = "hiddenBlock"> 
+                        <div style = "height:40px; margin: 10px 20px;">{{user.username}}</div>
+                        <div style = "min-height:310px; width:90%; margin: 0 auto; background-color:#999999; border-radius:10px; padding:10px; display:column;">
+                            <a style = "width:100%; min-height:40px; display: block; text-decoration:none; padding:5px;" class = "menuPart">Сообщения</a>
+                            <a style = "width:100%; min-height:40px; display: block; text-decoration:none; padding:5px;" class = "menuPart">Друзья</a>
+                            <a href = "/logout" style = "width:100%; min-height:40px; display: block; text-decoration:none; padding:5px;" class = "menuPart">Выйти из аккаунта</a>
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+        {% endif %}
+    </header>
+</div>
+<div class = "mainPart">
+    <div style = "width:80%; margin: 0 auto;">
+        <div style = "height:5px;"></div>
+        <div style = "height:35px;width:100%;">
+            <a href = "/blackList" class = "miniPage" >Черный список</a>
+            <a class = "miniPage" style = "background-color:white;">Поиск</a>
+        </div>
+
+
+        <div style = "width:80wh; height:80vh; background-color:white; padding:25px;">
+            <form class="form-inline my-2 my-lg-0" action="{{ path('blackList_search') }}" method="get">
+                <input class="form-control mr-sm-2" type="search" aria-label="Search" name="q">
+                <button class="btn btn-default my-2 my-sm-0" type="submit">Найти</button>
+            </form>
+            <div style = "height:20px;"></div>
+            <div style = "width:100%; height:100%; overflow: auto;">
+                {% for oneResult in sResults %}
+                    <div class = "friend">
+                        {{ oneResult.username }}
+                        <a href = "/blackList/add/{{oneResult.id}}" style = "float: right; cursor:pointer;">
+                            <img src="{{ asset('Files/Icons/decline.svg') }}" alt = "add" style = "height:30px;">
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    
+</div>
+ 
+{% endblock %}
